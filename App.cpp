@@ -8,7 +8,11 @@ App::App(Base* parent, string name): Base(parent, name){}
 
 void App::buildTree(){
 	string parent, child;
+	string new_name;
 	vector <Base *> created;
+	vector <Base *> current_level;
+	vector <Base *> next_level;
+	int level_number, level_index;
 	
 	cin >> parent;
 	setName(parent);
@@ -29,10 +33,32 @@ void App::buildTree(){
 		}
 		cin >> parent >> child;
 	}	
-	cout << getName();
+	cout << getName() << endl;
+	printTree();
+
+	cin >> level_number;
+	while (level_number != 0){
+		cin >> level_index >> new_name;
+		current_level.clear();
+		current_level.push_back(this);
+		for (int i = 1; i < level_number; i++){
+			next_level.clear();
+			for (int j = 0; j < current_level.size(); j++){
+				for (int k = 0; k < current_level[j]->getChildrenCount(); k++){
+					next_level.push_back(current_level[j]->getChild(k));
+				}
+			}
+			current_level = next_level;
+		}
+		if ((level_index > 0) && (level_index <= current_level.size())){
+			current_level[level_index - 1]->setName(new_name);
+		}
+		cin >> level_number;
+	}
 }
 
 int App::execApp(){
+	cout << getName() << endl;
 	printTree();
 	return 0;
 }

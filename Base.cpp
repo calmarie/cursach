@@ -3,6 +3,9 @@
 Base::Base(Base* parent, string name){
 	this->parent = parent;
 	this->name = name;
+	if (this->parent){
+		this->parent->children.push_back(this);
+	}
 }
 
 
@@ -10,7 +13,7 @@ bool Base::setName(string name){
 	if (parent){
 		for (int i = 0; i < parent->getChildrenCount(); i++){
 			Base* child = parent->getChild(i);
-			if (child->getName() == name){
+			if ((child != this) && (child->getName() == name)){
 				return 0;
 			}
 				
@@ -40,11 +43,14 @@ void Base::printTree(){
 	if (getChildrenCount() == 0){
 		return;
 	}
-	cout << name << endl;
+	cout << name;
 	for (int i = 0; i<getChildrenCount(); i++){
 		cout << "  " << children[i]->getName();
 	}
-	children.back()->printTree();
+	cout << endl;
+	for (int i = 0; i < getChildrenCount(); i++){
+		children[i]->printTree();
+	}
 	
 }
 
